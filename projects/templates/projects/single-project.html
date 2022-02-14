@@ -1,6 +1,17 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1>Single Project Template</h1>
-<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi, ipsam. Voluptatem nulla voluptate eos. Odio sint, eum rem voluptates a veniam eos architecto distinctio aspernatur doloremque nisi sed laborum minus sequi? Quam labore illum explicabo libero a blanditiis ipsa facere, iste possimus soluta dolores veniam debitis sunt porro, neque maiores commodi non quia vitae error aliquam, nisi facilis cupiditate officiis! Ducimus corporis repudiandae doloribus necessitatibus eaque perferendis nobis commodi maiores. Possimus sed eius dolore velit magni hic, reprehenderit sint natus nobis quisquam placeat. Animi officiis aperiam praesentium id, deserunt sequi nostrum quasi sed perspiciatis nisi veritatis ipsa iure necessitatibus. Assumenda?</p>
+    <h1>{{ project.title }}</h1>
+    <h3>{{ project.description }}</h3>
+    <p>{{ project.created }}</p>
+    <p>Related Tags</p>
+    
+    {% if tags %}
+    <hr>
+    {% for tag in tags %}
+        <span style="border:1px solid grey; margin: 10px">{{tag}}</span>
+    {% endfor %}
+    
+    <hr>
+    {% endif %}
 {% endblock content %}

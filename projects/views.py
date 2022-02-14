@@ -1,13 +1,20 @@
 from django.shortcuts import render, redirect
+from .models import Project
 
 
 def projects(request):
-    msg = 'Hello, you are on the projects page'
+    projects = Project.objects.all()
     context = {
-        'message': msg,
+        'projects': projects,
     }
     return render(request, 'projects/projects.html', context)
 
 
 def project(request, pk):
-    return render(request, 'projects/single-project.html')
+    project = Project.objects.get(id=pk)
+    tags = project.tags.all()
+    context = {
+        'project': project,
+        'tags': tags,
+    }
+    return render(request, 'projects/single-project.html', context)
