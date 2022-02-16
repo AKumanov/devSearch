@@ -1,11 +1,17 @@
 from email.policy import default
 from django.db import models
 import uuid
-
-# Create your models here.
+from users.models import Profile
 
 
 class Project(models.Model):
+    owner = models.ForeignKey(
+        Profile,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
+
     title = models.CharField(
         max_length=200,
     )
