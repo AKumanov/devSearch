@@ -13,10 +13,12 @@ def projects(request):
 
 def project(request, pk):
     project = Project.objects.get(id=pk)
+    profile = project.owner
     tags = project.tags.all()
     context = {
         'project': project,
         'tags': tags,
+        'profile': profile,
     }
     return render(request, 'projects/single-project.html', context)
 
