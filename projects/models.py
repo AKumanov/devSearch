@@ -3,6 +3,8 @@ from django.db import models
 import uuid
 from users.models import Profile
 
+from django.db.models.signals import post_save, post_delete
+
 
 class Project(models.Model):
     owner = models.ForeignKey(
@@ -123,3 +125,5 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
