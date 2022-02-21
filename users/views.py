@@ -23,14 +23,18 @@ def login_page(request):
             messages.success(request, message='username does not exist')
 
         user = authenticate(request, username=username, password=password)
-
+    
         if user is not None:
             login(request, user)
             return redirect('profiles')
         else:
             messages.success(request, message='Username Or password is incorrect')
 
-    return render(request, 'users/login_register.html')
+    context = {
+        'page': page,
+    }
+
+    return render(request, 'users/login_register.html', context)
 
 
 def logout_user(request):
