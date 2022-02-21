@@ -49,6 +49,21 @@ class SkillForm(ModelForm):
         fields = '__all__'
         exclude = ['owner']
 
+        widgets = {
+            'name': forms.TextInput(
+                attrs = {
+                    'autofocus': True,
+                    'placeholder': 'Add name..'
+                }
+            ),
+            'description': forms.Textarea(
+                attrs = {
+                    'placeholder': 'Add description..',
+                    'rows': 3
+                }
+            ),
+        }
+
     def __init__(self, *args, **kwargs):
         super(SkillForm, self).__init__(*args, **kwargs)
 

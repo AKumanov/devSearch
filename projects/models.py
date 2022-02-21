@@ -72,6 +72,11 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-created']
+
+
+
 class Review(models.Model):
     VOTE_TYPE = (
         ('up', 'Up Vote'),
@@ -106,6 +111,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.value
+
 
 class Tag(models.Model):
     name = models.CharField(
