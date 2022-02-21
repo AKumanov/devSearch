@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from users.models import Profile
 
 
-
 def create_profile(sender, instance, created, **kwargs):
     """
     when you create a new user, automatically a new profile, tied to the user is created
@@ -23,6 +22,16 @@ def create_profile(sender, instance, created, **kwargs):
         )
 
 
+def update_user(sender, instance, created, **kwargs):
+    profile = instance
+    user = profile.user
+    if not created:
+        user.first_name = profile.name
+        user.username = profile.username
+        user.email = profile.email
+        user.save()
+
+
 def delete_user(sender, instance, **kwargs):
     user = instance.user
     user.delete()
@@ -30,3 +39,4 @@ def delete_user(sender, instance, **kwargs):
 
 post_save.connect(create_profile, sender=User)
 post_delete.connect(delete_user, sender=Profile)
+post_save.connect(update_user, sender=Profile)
