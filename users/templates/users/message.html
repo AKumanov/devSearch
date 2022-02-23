@@ -7,7 +7,12 @@
       <div class="message">
         <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
         <h2 class="message__subject">{{message.subject}}</h4>
-          <a href="{% url 'user-profile' message.sender.id %}" class="message__author">{{message.name}}</a>
+          {% if message.sender %}
+          <a href="{% url 'user-profile' message.sender.id %}" class="message__author">From: {{message.name}}</a>
+          {% else %}
+          <p>From: {{message.name}}</p>
+          <br>
+          {% endif %}
           <p class="message__date">{{message.created}}</p>
           <div class="message__body">
             {{message.body|linebreaksbr}}
@@ -16,3 +21,10 @@
     </div>
   </main>
 {% endblock %}
+<script>
+  if (message.sender) {
+    console.log(message.sender)
+  } else {
+    console.log('anonymous')
+  }
+</script>
