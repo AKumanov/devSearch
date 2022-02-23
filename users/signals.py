@@ -24,9 +24,9 @@ def create_profile(sender, instance, created, **kwargs):
             name=user.first_name,
         )
 
-        subject = 'Welcome to DevSearch'
+        subject = f'Hello {user.username}, Welcome to DevSearch'
         message = 'We are glad you are here!'
-
+        # send emails when user registers an accounts
         send_mail(
             subject,
             message,
