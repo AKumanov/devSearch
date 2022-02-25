@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     'rest_framework',
+
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -55,6 +57,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -130,6 +133,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 # send emails settings 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
