@@ -99,6 +99,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.name)
+    
+    class Meta:
+        ordering = ['created']
+    
+    @property
+    def image_url(self):
+        try:
+            url = self.profile_image.url
+
+        except:
+            url = ''
+        return url
 
 
 class Skill(models.Model):

@@ -11,7 +11,7 @@ class Project(models.Model):
         Profile,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE
     )
 
     title = models.CharField(
@@ -74,6 +74,15 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-vote_ratio', '-vote_total', 'title']
+    
+    @property
+    def image_url(self):
+        try:
+            url = self.featured_image.url
+
+        except:
+            url = ''
+        return url
     
     @property
     def reviewers(self):
