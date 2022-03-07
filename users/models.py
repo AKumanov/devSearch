@@ -49,11 +49,7 @@ class Profile(models.Model):
     )
 
     profile_image = models.ImageField(
-        null=True,
-        blank=True,
-        upload_to='profiles/',
-        default="profiles/user-default.png"
-    )
+        null=True, blank=True, upload_to='profiles/', default="profiles/user-default.png")
 
     social_github = models.CharField(
         max_length=200,
@@ -95,7 +91,6 @@ class Profile(models.Model):
         primary_key=True,
         editable=False
     )
-
 
     def __str__(self):
         return str(self.name)

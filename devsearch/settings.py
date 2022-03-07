@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sr)yok#%fs-fc6xa5a&#o1$$%@k08t9lu996r=*zl@q94s#r*='
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     'rest_framework',
-
     'corsheaders',
+    'storages',
 ]
 
 REST_FRAMEWORK = {
@@ -96,10 +96,23 @@ WSGI_APPLICATION = 'devsearch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'devsearch',
+        'USER': 'postgres',
+        'PASSWORD': '901209Method',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -141,7 +154,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'infodevsearch@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_PASSWORD = 'ecaxobimbkrdsnfg'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -161,3 +174,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# connect to S3 bucket with django storages and boto3
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS_QUERYSTRING_AUTH = False
+# AWS_S3_FILE_OVERWRITE = False
+
+# AWS_ACCESS_KEY_ID = 'AKIA2NMEDIS447VNA2E3'
+# AWS_SECRET_ACCESS_KEY = 'SYyi3KmG9pANFYk66mD5uzF'
+# AWS_STORAGE_BUCKET_NAME = 'devsearch-testbucket'
+
+if os.getcwd() == '/app':
+    DEBUG = False
