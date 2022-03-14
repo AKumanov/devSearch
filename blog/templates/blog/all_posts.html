@@ -25,7 +25,7 @@
             <img src="{{ post.owner.profile_image.url }}" alt="pic" class="entry__author_picture">
             <div>
                 <h3 class="entry__author">{{post.owner.name}}</h3>
-                <a href="{% url 'post-detail' post.id %}" class="entry__author_username">@{{post.owner.username}}</a>
+                <a href="{% url 'user-profile' post.owner.id %}" class="entry__author_username">@{{post.owner.username}}</a>
             </div>
         </header>
         
@@ -34,7 +34,7 @@
             <p class="entry__description">{{post.description}}</p>
         </div>
         <div style="display: flex">
-            <a href="{% url 'post-detail' post.id %}"><h1 class="btn btn--sub btn--sm">Read More</h1></a>
+            <a  href="{% url 'post-detail' post.id %}"><h1 class="btn btn--sub btn--sm">Read More</h1></a>
         </div>
     </div>
     

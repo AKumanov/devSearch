@@ -16,7 +16,7 @@
 <div class="posts">
     <!-- card 1 -->
     {% for post in posts %}
-    <div class="post">
+    <div id="test" class="post">
         <a href="{% url 'post-detail' post.id %}">
         <header class="post__header">
             <img src="{{post.owner.profile_image.url}}" alt="pic" class="post__img">
