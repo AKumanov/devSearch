@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from users.models import Profile
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # Create your models here.
@@ -22,7 +23,7 @@ class Post(models.Model):
         blank=True
     )
 
-    body = models.TextField(
+    body = RichTextUploadingField(
         null=True,
         blank=True
     )

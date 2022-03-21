@@ -3,7 +3,7 @@
 
 
 {% block content %}
-<section style="height: auto;" class="hero-section text-center">
+<section class="hero-section text-center">
     <div class="container container--narrow">
       <div class="hero-section__box">
         <h2>All <span>Posts</span></h2>
@@ -11,6 +11,16 @@
 
       <div class="hero-section__search">
 
+        <form id="searchForm" class="form" action="{% url 'all-posts' %}" method="get">
+          <div class="form__field">
+            <label for="formInput#search">Search Posts </label>
+            <input class="input input--text" id="formInput#search" type="text" name="search_query"
+              placeholder="Search by post title.." value="{{search_query}}" />
+
+          </div>
+
+          <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+        </form>
       </div>
     </div>
   </section>
@@ -39,8 +49,11 @@
     </div>
     
     {% endfor %}
+    
     <!-- end first post -->
 </div>
+
+{% include 'pagination.html' with queryset=posts custom_range=custom_range %}
 
 {% endblock content %}
 

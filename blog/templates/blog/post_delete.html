@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<form action="{% url 'post-delete' post.pk %}" method="POST">
+{% csrf_token %}
+{{form}}
+Are you sure you want to proceed?
+<input class="btn btn-danger" type="submit" value="Delete">
+</form>
+{% endblock %}

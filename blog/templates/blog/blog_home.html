@@ -4,7 +4,7 @@
 <section style="height: auto;" class="hero-section text-center">
     <div class="container container--narrow">
       <div class="hero-section__box">
-        <h2>Featured <span>Posts</span></h2>
+        <h2>Recent <span>Posts</span></h2>
       </div>
 
       <div class="hero-section__search">
@@ -15,7 +15,7 @@
 
 <div class="posts">
     <!-- card 1 -->
-    {% for post in posts %}
+    {% for post in featured_posts %}
     <div id="test" class="post">
         <a href="{% url 'post-detail' post.id %}">
         <header class="post__header">

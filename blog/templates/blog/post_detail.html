@@ -1,5 +1,34 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <h1>{{post.title}}</h1>
+<main class="singleProject my-md">
+    <div class="container">
+      <div class="layout">
+        <div class="column column--1of3">
+          <h3 class="singleProject__subtitle">Technology and Topics</h3>
+          <div class="singleProject__toolStack">
+
+          </div>
+
+        </div>
+        <div class="column column--2of3">
+          <img class="singleProject__preview" src="{{ post.featured_image.url }}" alt="featured image" />
+          <a href="{% url 'user-profile' post.owner.id %}" class="singleProject__developer">{{ post.owner.name }}</a>
+          <h2 class="singleProject__title">{{ post.title }}</h2>
+          <hr>
+          <div class="singleProject__info">
+            {{ post.body|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if request.user.username == post.owner.username%}
+<div style="display: flex; gap: 0px;">
+    <a style="margin: 0 auto; margin-bottom: 50px;" href="{% url 'post-update' post.pk %}"><h1 class="btn btn--sub btn--sm">Update Post</h1></a>
+    <a style="margin: 0 auto; margin-bottom: 50px;" href="{% url 'post-delete' post.pk %}"><h1 class="btn btn--sub btn--sm">Delete Post</h1></a>
+</div>
+{% endif %}
+    </div>
+    
+  </main>
 {% endblock %}
