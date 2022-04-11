@@ -4,6 +4,24 @@ from users.models import Profile
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
+class Topic(models.Model):
+    title = models.CharField(
+        max_length=250,
+    )
+
+    description = models.TextField(
+
+    )
+
+    image = models.ImageField(
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.title
+
+
 # Create your models here.
 class Post(models.Model):
     owner = models.ForeignKey(
@@ -11,6 +29,13 @@ class Post(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE
+    )
+
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
 
     title = models.CharField(
@@ -47,10 +72,10 @@ class Post(models.Model):
 
     is_featured = models.BooleanField(
         default=False
-    ) 
+    )
 
     def __str__(self):
         return self.title
 
     class Meta:
-        ordering=['-created']
+        ordering = ['-created']

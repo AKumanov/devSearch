@@ -1,48 +1,32 @@
-import re
-from users.models import Profile
-from django.shortcuts import render, redirect
-from .models import Post
+from django.shortcuts import redirect
+from .models import Post, Topic
 from django.views import View, generic as views
 from .forms import CreatePostForm
 from django.urls import reverse_lazy
-from .utils import paginate_posts, search_posts
+
 
 class PostMixinView(View):
     model = Post
-    success_url = reverse_lazy('all-posts')
+    success_url = reverse_lazy('blog-home')
+
 
 class PostsListView(views.ListView):
-    model = Post
+    model = Topic
     template_name = 'blog/blog_home.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        featured_posts = Post.objects.filter(is_featured=True)[0:5]
-        context['featured_posts'] = featured_posts
-        return context
+    context_object_name = 'topics'
 
 
-class AllPostsView(views.ListView):
+class AllPostsFromTopicView(views.ListView):
     model = Post
     template_name = 'blog/all_posts.html'
     context_object_name = 'posts'
     paginate_by = 6
-    # paginate_by = 6
 
-    def get_queryset(self):
-        return super().get_queryset()
-        
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        request = self.request
-        posts, search_query = search_posts(request)
-        custom_range, posts = paginate_posts(request, posts, 9)
-        context['custom_range'] = custom_range
-        context['posts'] = posts
-        context[' search_query'] = search_query
-        return context
-    
+    def get_queryset(self, **kwargs):
+        queryset = Post.objects.filter(topic__title=self.kwargs['topic'])
+        return queryset
+
 
 class SinglePostView(views.DetailView):
     model = Post
@@ -60,7 +44,7 @@ class PostCreateView(PostMixinView, views.CreateView):
             post.owner = request.user.profile
             post.save()
             return redirect('all-posts')
-    
+
 
 class PostUpdateView(PostMixinView, views.UpdateView):
     template_name = 'blog/post_update.html'

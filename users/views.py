@@ -1,12 +1,33 @@
+import views as views
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
+
+from projects.models import Project
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
 from .models import Profile, Message
 from django.db.models import Q
 from .utils import search_profiles, paginate_profiles
+from django.views import View, generic as views
+
+
+class DashboardAdminView(views.ListView):
+    model = Profile
+    template_name = 'users/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        users = Profile.objects.all()
+        projects = Project.objects.all()
+        number_of_users = len(users)
+        number_of_projects = len(projects)
+        context['users'] = users
+        context['projects'] = projects
+        context['number_of_users'] = number_of_users
+        context['number_of_projects'] = number_of_projects
+        return context
 
 
 def login_page(request):
@@ -25,7 +46,7 @@ def login_page(request):
             messages.success(request, message='username does not exist')
 
         user = authenticate(request, username=username, password=password)
-    
+
         if user is not None:
             login(request, user)
             return redirect(request.GET['next'] if 'next' in request.GET else 'account')
@@ -45,7 +66,6 @@ def logout_user(request):
     return redirect('login')
 
 
-
 def register_user(request):
     page = 'register'
     form = CustomUserCreationForm()
@@ -53,10 +73,11 @@ def register_user(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False) # saving and holding a temporary instance of the user to modify before the actual save
+            user = form.save(
+                commit=False)  # saving and holding a temporary instance of the user to modify before the actual save
             user.username = user.username.lower()
             user.save()
-            
+
             messages.success(request, message='User account was created!')
 
             login(request, user)
@@ -83,6 +104,7 @@ def profiles(request):
 
     return render(request, 'users/profiles.html', context)
 
+
 def user_profile(request, pk):
     profile = Profile.objects.get(id=pk)
     top_skills = profile.skill_set.exclude(description__exact="")
@@ -98,18 +120,20 @@ def user_profile(request, pk):
     }
     return render(request, 'users/user-profile.html', context)
 
+
 @login_required(login_url='login')
 def user_account(request):
     profile = request.user.profile
     skills = profile.skill_set.all()
     projects = profile.project_set.all()
-   
+
     context = {
         'profile': profile,
         'skills': skills,
         'projects': projects,
     }
     return render(request, 'users/account.html', context)
+
 
 @login_required(login_url='login')
 def edit_account(request):
@@ -190,6 +214,7 @@ def inbox(request):
 
     return render(request, 'users/inbox.html', context)
 
+
 @login_required(login_url='login')
 def view_message(request, pk):
     profile = request.user.profile
@@ -212,7 +237,7 @@ def create_message(request, pk):
         sender = request.user.profile
     except:
         sender = None
-    
+
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():

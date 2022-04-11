@@ -1,41 +1,33 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<section style="height: auto;" class="hero-section text-center">
-    <div class="container container--narrow">
-      <div class="hero-section__box">
-        <h2>Recent <span>Posts</span></h2>
-      </div>
-
-      <div class="hero-section__search">
-
-      </div>
-    </div>
-  </section>
-
-<div class="posts">
-    <!-- card 1 -->
-    {% for post in featured_posts %}
-    <div id="test" class="post">
-        <a href="{% url 'post-detail' post.id %}">
-        <header class="post__header">
-            <img src="{{post.owner.profile_image.url}}" alt="pic" class="post__img">
-            <div>
-                <h3>
-                    {{post.owner.name}}
-                </h3>
-                {% if post.owner.short_intro %}<p>{{post.owner.short_intro}}</p>{% endif %}
+    <section style="height: auto;" class="hero-section text-center">
+        <div class="container container--narrow">
+            <div class="hero-section__box">
+                <h2><span>Topics</span></h2>
             </div>
-        </header>   
-        <p class="post__lead">{{ post.title }}</p>
-            
-        <p class="post__quote">{{post.body}}</p>
-    </a>
+
+            <div class="hero-section__search">
+
+            </div>
+        </div>
+    </section>
+
+    <div class="posts">
+        <!-- card 1 -->
+        {% for topic in topics %}
+            <div id="test" class="post">
+                <a href="{% url 'topic-posts' topic.title %}">
+
+                <p class="post__lead">{{ topic.title }}</p>
+                <div class="featured_image">
+                    <img src="{{ topic.image.url }}" alt="image">
+                </div>
+
+                <p class="post__quote">{{ topic.description }}</p>
+                </a>
+            </div>
+            <!-- end card 1 -->
+        {% endfor %}
     </div>
-    <!-- end card 1 -->
-    {% endfor %}
-</div>
-<div style="display: flex;">
-    <a style="margin: 0 auto; margin-bottom: 50px;" href="{% url 'all-posts' %}"><h1 class="btn btn--sub btn--lg">All Posts</h1></a>
-</div>   
 {% endblock %}  
