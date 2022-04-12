@@ -2,10 +2,12 @@
 
 {% block content %}
 
-<form action="{% url 'post-delete' post.pk %}" method="POST">
-{% csrf_token %}
-{{form}}
-Are you sure you want to proceed?
-<input class="btn btn-danger" type="submit" value="Delete">
-</form>
+    <form action="{% url 'post-delete' post.pk %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <div style="text-align: center; margin-top: 100px">
+            Are you sure you want to proceed?
+                <input class="btn btn-danger btn--lg" type="submit" value="Delete">
+        </div>
+    </form>
 {% endblock %}

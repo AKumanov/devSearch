@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from .models import Post, Topic
 from django.views import View, generic as views
-from .forms import CreatePostForm
+from .forms import CreatePostForm, UpdatePostForm
 from django.urls import reverse_lazy
 
 
@@ -43,12 +43,12 @@ class PostCreateView(PostMixinView, views.CreateView):
             post = form.save(commit=False)
             post.owner = request.user.profile
             post.save()
-            return redirect('all-posts')
+            return redirect('blog-home')
 
 
 class PostUpdateView(PostMixinView, views.UpdateView):
     template_name = 'blog/post_update.html'
-    fields = '__all__'
+    form_class = UpdatePostForm
 
 
 class PostDeleteView(PostMixinView, views.DeleteView):

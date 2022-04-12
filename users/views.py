@@ -219,7 +219,7 @@ def inbox(request):
 def view_message(request, pk):
     profile = request.user.profile
     message = profile.messages.get(id=pk)
-    if message.is_read == False:
+    if not message.is_read:
         message.is_read = True
         message.save()
 

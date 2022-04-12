@@ -12,7 +12,7 @@
 </style>
 
         <div class="formWrapper">
-            <a class="backButton" href="{% url 'all-posts' %}"><i class="im im-angle-left"></i></a>
+            <a class="backButton" href="{% url 'blog-home' %}"><i class="im im-angle-left"></i></a>
             <br>
     <form class="form" action="{% url 'post-create' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}

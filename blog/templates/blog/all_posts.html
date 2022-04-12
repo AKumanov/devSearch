@@ -31,7 +31,11 @@
     
     <!-- end first post -->
 </div>
-
+    {% if request.user.is_superuser %}
+    <div style="text-align: center" >
+        <a class="btn btn--sub btn--md" href="{% url 'post-create' %}">Create a Post</a>
+    </div>
+    {% endif %}
 {% include 'pagination.html' with queryset=posts custom_range=custom_range %}
 
 {% endblock content %}
