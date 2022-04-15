@@ -10,7 +10,7 @@ from users.forms import CustomUserCreationForm, CustomStaffUserCreationForm
 from users.models import Profile
 
 
-class TestViews(TestCase):
+class TestUserViews(TestCase):
     __PROJECT_TITLE = 'Test title'
     __USER_DATA = {
         'username': 'jdoe',
@@ -22,7 +22,7 @@ class TestViews(TestCase):
         'password': 'Some12Strange213',
     }
 
-    __REGISTER_CREDS = {
+    _REGISTER_CREDS = {
         'first_name': 'Alexander',
         'email': 'test_user@abv.bg',
         'username': 'kumana',
@@ -102,7 +102,7 @@ class TestViews(TestCase):
         self.failUnless(isinstance(response.context['form'], CustomUserCreationForm))
 
     def test_registration_view_post_success(self):
-        response = self.client.post(reverse('register'), self.__REGISTER_CREDS)
+        response = self.client.post(reverse('register'), self._REGISTER_CREDS)
         self.assertEquals(302, response.status_code)
         users = get_user_model().objects.all()
         self.assertEqual(users.count(), 1)
@@ -114,7 +114,7 @@ class TestViews(TestCase):
         self.failIf(response.context['form'].is_valid())
 
     def test_registration_complete_view_get(self):
-        response = self.client.post(reverse('register'), self.__REGISTER_CREDS)
+        response = self.client.post(reverse('register'), self._REGISTER_CREDS)
         self.assertEquals(302, response.status_code)
         profile = Profile.objects.first()
         users = get_user_model()
@@ -122,9 +122,9 @@ class TestViews(TestCase):
         self.assertTrue(user.is_authenticated)
         self.assertTrue(user.is_active)
         self.assertIsNotNone(profile)
-        self.assertEquals(profile.name, self.__REGISTER_CREDS['first_name'])
-        self.assertEquals(profile.email, self.__REGISTER_CREDS['email'])
-        self.assertEquals(profile.username, self.__REGISTER_CREDS['username'])
+        self.assertEquals(profile.name, self._REGISTER_CREDS['first_name'])
+        self.assertEquals(profile.email, self._REGISTER_CREDS['email'])
+        self.assertEquals(profile.username, self._REGISTER_CREDS['username'])
 
     def test_registration_staff_view_get(self):
         response = self.client.get(reverse('register-staff'))
@@ -134,7 +134,7 @@ class TestViews(TestCase):
 
     def test_register_staff_view_post_success(self):
         group = self.__create_permission_group()
-        response = self.client.post(reverse('register-staff'), self.__REGISTER_CREDS)
+        response = self.client.post(reverse('register-staff'), self._REGISTER_CREDS)
         self.assertEquals(302, response.status_code)
         users = get_user_model()
         user = users.objects.all()[0]
@@ -154,8 +154,33 @@ class TestViews(TestCase):
     def test_login_view(self):
         response = self.client.get(reverse('login'))
         self.assertEquals(200, response.status_code)
-        # response = self.client.post(reverse('login'), data={
-        #     'username': 'kumana',
-        #     'password': '901209Method'
-        # })
-        # self.assertEquals(200, response.status_code)
+
+
+class TestSkillViews(TestCase):
+    __USER_DATA = {
+        'username': 'jdoe',
+        'email': 'jdoe@example.com',
+        'password': 'Some12Strange213'
+    }
+
+    def __register_user(self):
+        self.client.login(username='kumana', password='901209Method')
+        return
+
+    def __get_user_and_profile_objects(self):
+        user = User(**self.__USER_DATA)
+        user.save()
+        profile = Profile.objects.get(user=user)
+        self.client.login(username=user.username, password=user.password)
+        return user, profile
+
+    # def test_create_skill(self):
+    #     user, profile = self.__get_user_and_profile_objects()
+    #     self.assertIsNotNone(user)
+    #     self.assertTrue(user.is_authenticated)
+    #     self.assertTrue(user.is_active)
+    #     response = self.client.post(reverse('create-skill'))
+    #     # session = self.client.session
+    #     code = response.status_code
+    #     pass
+
