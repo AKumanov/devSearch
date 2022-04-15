@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    {% if request.user.is_superuser%}
+    {% if request.user.is_staff %}
 <div style="display: flex; gap: 0px;">
     <a style="margin: 0 auto; margin-bottom: 50px;" href="{% url 'post-update' post.pk %}"><h1 class="btn btn--sub btn--sm">Update Post</h1></a>
     <a style="margin: 0 auto; margin-bottom: 50px;" href="{% url 'post-delete' post.pk %}"><h1 class="btn btn--sub btn--sm">Delete Post</h1></a>

@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response 
+from rest_framework.response import Response
+
+from users.models import Message
 from .serializers import ProjectSerializier
 from projects.models import Project, Review, Tag
 
@@ -14,7 +16,7 @@ def getRoutes(request):
 
         {'POST': '/api/users/token'},
         {'POST': '/api/users/token/refresh'},
-]
+    ]
     return Response(routes)
 
 
@@ -41,12 +43,12 @@ def project_vote(request, pk):
     data = request.data
 
     review, created = Review.objects.get_or_create(
-        owner = user,
-        project = project,
+        owner=user,
+        project=project,
     )
     review.value = data['value']
     review.save()
-    project.get_vote_count
+    project.get_vote_count()
 
     serializer = ProjectSerializier(project, many=False)
     return Response(serializer.data)
@@ -64,3 +66,12 @@ def remove_tag(request):
     project.tags.remove(tag)
 
     return Response('Tag was deleted')
+
+
+@api_view(['DELETE'])
+def remove_message(request):
+    messageId = request.data['message']
+
+    message = Message.objects.get(id=messageId)
+    message.delete()
+    return Response('Message was deleted')

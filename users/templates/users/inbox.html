@@ -18,10 +18,11 @@
             <span class="message__subject">{{message.subject}}</span>
             <span class="message__date">{{message.created}}</span>
           </a>
+
+            <div class="project-message tag tag--pill tag--main" data-message="{{ message.id }}">&#215;</div>
         </li>
     
       {% endfor %}
-    </div>
   </main>
 
   {% endblock %}

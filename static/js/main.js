@@ -41,3 +41,26 @@ for (let i=0; i< tags.length; i++) {
         })
     })
 }
+
+let messages = document.getElementsByClassName('project-message');
+
+for (let i=0; i<messages.length; i++) {
+    messages[i].addEventListener('click', (e) => {
+        let messageID = e.target.dataset.message
+
+        fetch('http://127.0.0.1:8000/api/remove-message/', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'message': messageID,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                e.target.remove()
+                location.reload()
+            })
+    })
+}

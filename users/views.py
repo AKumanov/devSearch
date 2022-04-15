@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
+from blog.models import Post
 from projects.models import Project
-from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
+from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm, CustomStaffUserCreationForm
 from .models import Profile, Message
 from django.db.models import Q
 from .utils import search_profiles, paginate_profiles
@@ -90,6 +91,34 @@ def register_user(request):
         'form': form,
     }
     return render(request, 'users/login_register.html', context)
+
+
+def register_staff_user(request):
+    page = 'register'
+    form = CustomStaffUserCreationForm()
+    if request.method == 'POST':
+        form = CustomStaffUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.is_staff = True
+            user.save()
+            staff_group = Group.objects.get(name='Staff')
+            staff_group.user_set.add(user)
+            staff_group.save()
+
+            messages.success(request, message='New Staff member has been added!')
+
+            login(request, user)
+            return redirect('edit-account')
+        else:
+            messages.error(request, message='An error has occurred during registration')
+    context = {
+        'page': page,
+        'form': form,
+    }
+    return render(request, 'users/login_register_staff.html', context)
+
 
 
 def profiles(request):
@@ -227,6 +256,38 @@ def view_message(request, pk):
         'message': message,
     }
     return render(request, 'users/message.html', context)
+
+
+def send_issue(request, pk, post_pk):
+    page = 'blog'
+    recipient = Profile.objects.get(id=pk)
+    form = MessageForm()
+    post = Post.objects.get(id=post_pk)
+    try:
+        sender = request.user.profile
+    except:
+        sender = None
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.recipient = recipient
+            if sender:
+                message.name = sender
+                message.email = sender.email
+                message.subject = f'Fix issue with post {post.title} in {post.topic}'
+            message.save()
+            messages.success(request, message='Your issue has been submitted successfully')
+            return redirect('blog-home')
+    context = {
+        'recipient': recipient,
+        'form': form,
+        'post': post,
+        'page': page,
+    }
+    return render(request, 'users/message_form.html', context)
 
 
 def create_message(request, pk):

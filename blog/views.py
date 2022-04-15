@@ -1,4 +1,8 @@
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import redirect
+
+from users.models import Profile
 from .models import Post, Topic
 from django.views import View, generic as views
 from .forms import CreatePostForm, UpdatePostForm
@@ -54,3 +58,21 @@ class PostUpdateView(PostMixinView, views.UpdateView):
 class PostDeleteView(PostMixinView, views.DeleteView):
     template_name = 'blog/post_delete.html'
     fields = '__all__'
+    success_url = reverse_lazy('blog-home')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = request.user
+        if user.has_perm('blog.delete_post'):
+            form = self.get_form()
+            if form.is_valid():
+                return self.form_valid(form)
+        else:
+            superuser = User.objects.filter(is_superuser=True)
+            profile = Profile.objects.get(user=superuser[0])
+            return redirect('send-issue', profile.id, self.object.id)
+
+    def form_valid(self, form):
+        self.object.delete()
+        success_url = self.get_success_url()
+        return HttpResponse(success_url)

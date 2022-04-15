@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 
 from blog.models import Topic
-from blog.views import PostsListView
 
 
 class AllPostsListViewTests(TestCase):

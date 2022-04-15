@@ -6,6 +6,21 @@ from .models import Profile, Skill, Message
 from django import forms
 
 
+class CustomStaffUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'email', 'username', 'password1', 'password2', 'is_staff']
+        labels = {
+            'first_name': 'Name'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomStaffUserCreationForm, self).__init__(*args, **kwargs)
+
+        for _, field in self.fields.items():
+            field.widget.attrs.update({'class': 'input'})
+
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User

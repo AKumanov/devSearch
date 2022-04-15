@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from projects.models import Project, Tag, Review
-from users.models import Profile
-
+from users.models import Profile, Message
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -16,18 +15,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
 
 
-
 class ProjectSerializier(serializers.ModelSerializer):
     owner = ProfileSerializer(many=False)
     tags = TagSerializer(many=True)
     reviews = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
         fields = '__all__'
@@ -36,3 +34,9 @@ class ProjectSerializier(serializers.ModelSerializer):
         reviews = obj.review_set.all()
         serializer = ReviewSerializer(reviews, many=True)
         return serializer.data
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
