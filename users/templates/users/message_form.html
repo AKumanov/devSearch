@@ -25,7 +25,11 @@
                     {% endif %}
                     <div class="form__field">
                         <label for="formInput#text">{{form.subject.label}}</label>
+                        {% if page %}
+                            Fix issue with post <span>{{ post }}</span> in {{ post.topic }}
+                            {% else %}
                         {{form.subject}}
+                        {% endif %}
                     </div>
 
                     <div class="form__field">

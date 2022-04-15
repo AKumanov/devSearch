@@ -21,17 +21,11 @@ class UpdatePostTest(TestCase):
             owner=profile,
             title='Test post'
         )
-        post.save()
         post_data = {
             'title': 'Test post - Upd'
         }
-        self.client.post(
-            reverse('post-update', kwargs={
-                post.id
-            }),
-            data=post_data
-
-        )
-        post.save()
+        response = self.client.post(reverse('post-update', args=[post.id]), data=post_data)
+        self.assertEqual(302, response.status_code)
         post = Post.objects.first()
-        self.assertEqual('Test Post - Upd', post.title)
+        self.assertEqual(post_data['title'], post.title)
+
