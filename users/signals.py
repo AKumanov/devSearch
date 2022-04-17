@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 from users.models import Profile
 
 
@@ -18,8 +18,8 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         user = instance
         profile = Profile.objects.create(
-            user = user,
-            username = user.username,
+            user=user,
+            username=user.username,
             email=user.email,
             name=user.first_name,
         )
@@ -52,6 +52,7 @@ def delete_user(sender, instance, **kwargs):
         user.delete()
     except:
         pass
+
 
 post_save.connect(create_profile, sender=User)
 post_delete.connect(delete_user, sender=Profile)

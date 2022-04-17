@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
@@ -6,8 +8,8 @@ from users.signals import create_profile
 
 from django.urls import reverse
 from projects.models import Project
-from users.forms import CustomUserCreationForm, CustomStaffUserCreationForm
-from users.models import Profile
+from users.forms import CustomUserCreationForm, CustomStaffUserCreationForm, SkillForm
+from users.models import Profile, Skill
 
 
 class TestUserViews(TestCase):
@@ -163,24 +165,28 @@ class TestSkillViews(TestCase):
         'password': 'Some12Strange213'
     }
 
-    def __register_user(self):
-        self.client.login(username='kumana', password='901209Method')
-        return
-
-    def __get_user_and_profile_objects(self):
+    def __create_user(self):
         user = User(**self.__USER_DATA)
         user.save()
-        profile = Profile.objects.get(user=user)
-        self.client.login(username=user.username, password=user.password)
+        profile = Profile.objects.get(user=user.id)
         return user, profile
 
-    # def test_create_skill(self):
-    #     user, profile = self.__get_user_and_profile_objects()
-    #     self.assertIsNotNone(user)
-    #     self.assertTrue(user.is_authenticated)
-    #     self.assertTrue(user.is_active)
-    #     response = self.client.post(reverse('create-skill'))
-    #     # session = self.client.session
-    #     code = response.status_code
-    #     pass
+    def test_create_skill_get(self):
+        user, profile = self.__create_user()
+        self.assertIsNotNone(user)
+        self.client.login(username=user.username, password=user.password)
+        response = self.client.get(reverse('create-skill'), follow=True)
+        self.assertEquals(200, response.status_code)
+
+    def test_create_skill_post(self):
+        user, profile = self.__create_user()
+        self.assertIsNotNone(user)
+        self.client.login(username = user.username, password=user.password)
+        response = self.client.post(reverse('create-skill'), data={
+            'owner': profile,
+            'name': 'Test Name',
+        }, follow=True)
+        self.assertEqual(200, response.status_code)
+        skill = Skill.objects.first()
+        self.assertIsNotNone(skill)
 

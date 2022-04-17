@@ -30,4 +30,9 @@
             <!-- end card 1 -->
         {% endfor %}
     </div>
+    {% if request.user.is_staff %}
+    <div style="text-align: center;" >
+        <a class="btn btn--sub btn--md" href="{% url 'post-create' %}">Create a Post</a>
+    </div>
+    {% endif %}
 {% endblock %}  

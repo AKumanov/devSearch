@@ -75,4 +75,4 @@ class PostDeleteView(PostMixinView, views.DeleteView):
     def form_valid(self, form):
         self.object.delete()
         success_url = self.get_success_url()
-        return HttpResponse(success_url)
+        return redirect(success_url)

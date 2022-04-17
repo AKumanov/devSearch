@@ -56,7 +56,6 @@ class Post(models.Model):
     featured_image = models.ImageField(
         null=True,
         blank=True,
-        default='default.jpg'
     )
 
     created = models.DateTimeField(
